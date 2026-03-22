@@ -28,6 +28,8 @@ export interface Course {
   images: string[];
   totalSpots: number;
   availableSpots: number;
+  spotsLeft?: number;
+  address?: string;
   Institution?: Institution;
   createdAt: string;
   updatedAt: string;
