@@ -50,7 +50,8 @@ export default function BookingPage({ equipmentId }: BookingPageProps) {
 
     createBooking({
       equipmentId,
-      startTime: selectedDate + ' ' + selectedTime,
+      time: selectedTime,
+      date: selectedDate,
       rentalType: rentalType,
       files: selectedFiles,
     })
