@@ -24,7 +24,7 @@ export class ApiError extends Error {
 function getAuthToken(): string | null {
   if (typeof window === 'undefined') return null
   try {
-    const token = localStorage.getItem('auth_token')
+    const token = localStorage.getItem('token')
     return token
   } catch {
     return null

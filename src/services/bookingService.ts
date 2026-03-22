@@ -5,8 +5,8 @@ import { api } from '@/utils/api'
 
 export interface BookingRequest {
   equipmentId: string
-  startTime: string
-  endTime?: string
+  time: string
+  date: string
   rentalType: 'remote' | 'in-person'
   files?: string[]
   location?: string
@@ -20,7 +20,7 @@ export interface Booking {
     name: string
   }
   userId: string
-  startTime: string
+  time: string
   endTime: string
   rentalType: 'remote' | 'in-person'
   status: 'pending' | 'confirmed' | 'active' | 'completed' | 'cancelled'
