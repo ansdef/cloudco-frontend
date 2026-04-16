@@ -77,7 +77,7 @@ export default function EquipmentDetail({ equipmentId }: EquipmentDetailProps) {
           />
         ) : (
           <ImageWithFallback 
-            src={equipment.image ?? ''}
+            src={equipment.image ?? '/equipment/oculus.jpg'}
             alt={equipment.name} 
             className={styles.image}
             fallbackText={equipment.name}
