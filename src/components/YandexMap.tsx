@@ -27,6 +27,7 @@ export default function YandexMap() {
             theme: 'dark'
           });
   
+          // @ts-ignore
           const placemark = new ymaps.Placemark(
             [55.751244, 37.618423],
             {},
