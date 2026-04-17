@@ -3,6 +3,12 @@
 import Link from 'next/link'
 import styles from './Header.module.css'
 import { useAuth } from '@/hooks/useAuth'
+import dynamic from "next/dynamic";
+import { useEffect, useState } from 'react';
+
+const YandexMap = dynamic(() => import("@/components/YandexMap"), {
+  ssr: false,
+});
 
 interface HeaderProps {
   showBack?: boolean
@@ -11,46 +17,77 @@ interface HeaderProps {
 
 export default function Header({ showBack = false, title }: HeaderProps) {
   const { isAuthenticated } = useAuth();
+  const [isMapShown, setIsMapShown] = useState(false);
+  const [isMapFixed, setIsMapFixed] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMapFixed(window.innerWidth < 650);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <header className={styles.header}>
-      <div className={styles.statusBar}>
-        <span className={styles.time}>8:16</span>
-        <div className={styles.statusIcons}>
-          <span className={styles.icon}>📶</span>
-          <span className={styles.icon}>📶</span>
-          <span className={styles.icon}>🔋</span>
-        </div>
-      </div>
-      <div className={styles.navBar}>
-        {showBack && (
-          <Link href="/" className={styles.backButton}>
-            ←
-          </Link>
-        )}
-        <Link href="/" className={styles.logo}>
-          <div className={styles.logoIcon}>
-            <div className={styles.square1}></div>
-            <div className={styles.square2}></div>
-          </div>
-          <span className={styles.logoText}>Cloud.co-</span>
-        </Link>
-        {!showBack && (
-          <Link href="/filesystem" className={styles.filesButton}>
-            📁 Файлы
-          </Link>
-        )}
-        <div className={styles.rightActions}>
-          <button className={styles.notificationButton}>🔔</button>
+    <div>
 
-          <Link href={isAuthenticated ? '/filesystem' : '/login'} className={styles.profilePicture}>
-            <div className={styles.profilePlaceholder}>
-              <span>👤</span>
-            </div>
-          </Link>
+      <header className={styles.header}>
+        <div className={styles.statusBar}>
+          <span className={styles.time}>8:16</span>
+          <div className={styles.statusIcons}>
+            <span className={styles.icon}>📶</span>
+            <span className={styles.icon}>📶</span>
+            <span className={styles.icon}>🔋</span>
+          </div>
         </div>
+        <div className={styles.navBar}>
+          {showBack && (
+            <Link href="/" className={styles.backButton}>
+              ←
+            </Link>
+          )}
+          <Link href="/" className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <div className={styles.square1}></div>
+              <div className={styles.square2}></div>
+            </div>
+            <span className={styles.logoText}>Cloud.co-</span>
+          </Link>
+          {!isMapFixed && (
+            <button className={styles.filesButton} onClick={() => setIsMapShown(prev => !prev)}>
+              🗺️ Карты
+            </button>
+          )}
+          {!showBack && (
+            <Link href="/filesystem" className={styles.filesButton}>
+              📁 Файлы
+            </Link>
+          )}
+          <div className={styles.rightActions}>
+            <button className={styles.notificationButton}>🔔</button>
+
+            <Link href={isAuthenticated ? '/filesystem' : '/login'} className={styles.profilePicture}>
+              <div className={styles.profilePlaceholder}>
+                <span>👤</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+        {title && <h1 className={styles.pageTitle}>{title}</h1>}
+      </header>
+
+      <div
+        className="overflow-hidden transition-[height]"
+        style={{ height: (isMapShown || isMapFixed ? '400px' : '0px'), transitionDuration: '1.5s' }}
+      >
+        <YandexMap />
       </div>
-      {title && <h1 className={styles.pageTitle}>{title}</h1>}
-    </header>
+    </div>
   )
 }
