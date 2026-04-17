@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --font-onest: 'Onest', sans-serif;
-  --font-calvino: 'Calvino Display Italic', 'Playfair Display', serif;
-  --font-playfair: 'Playfair Display', serif;
   
   /* Dark theme colors */
   --bg-primary: #0a0a0a;

@@ -19,7 +19,18 @@ interface HeaderProps {
 export default function Header({ showBack = false, showMobileMap = false, title }: HeaderProps) {
   const { isAuthenticated } = useAuth();
   const [isMapShown, setIsMapShown] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMapFixed, setIsMapFixed] = useState(false);
+  const [time, setTime] = useState('');
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,12 +51,7 @@ export default function Header({ showBack = false, showMobileMap = false, title 
 
       <header className={styles.header}>
         <div className={styles.statusBar}>
-          <span className={styles.time}>8:16</span>
-          <div className={styles.statusIcons}>
-            <span className={styles.icon}>📶</span>
-            <span className={styles.icon}>📶</span>
-            <span className={styles.icon}>🔋</span>
-          </div>
+          <span className={styles.time}>{time}</span>
         </div>
         <div className={styles.navBar}>
           {showBack && (
